@@ -11,6 +11,7 @@ class Controller extends BaseController
 {
     private $token = '7z@{0A}Z{mFXmV6WUVN#CA38';
 
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

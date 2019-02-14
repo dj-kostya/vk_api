@@ -67,25 +67,5 @@ class Controller extends BaseController
         return $response;
     }
 
-    public function getRatingKP(Request $request)
-    {
-        if ($request->has('title') and strlen($request->input('title'))>0)
-        {
-            $title = $request->input('title');
-            $kp = new kinopoisk;
-            $id = $kp->getIdByTitle($title);
-            #$id = 178591;
-            $kp_rt = $kp->getKpRatingById($id);
-            $response = response()->json([
-                "kp_id"=>$id,
-                "kp_rating"=>$kp_rt,
-            ],200);
-        }else
-        {
-            $response = response()->json([
-                "error"=> 'Неверные параметры'
-            ],400);
-        }
-        return $response;
-    }
+
 }

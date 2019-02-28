@@ -22,9 +22,11 @@ class Controller extends BaseController
         $photoUri = $request->input("url");
         $message = $request->input("message");
         $token = $request->input("access_token");
+
         if ($request->has('access_token') and $token == $this->token) {
             if ($request->has('message') and strlen($message) > 0) {
-                if (!$request->has('url') or strlen($photoUri) == 0) {
+
+                if ($request->has('url') or strlen($photoUri) == 0) {
                     $res = $vk_api->get('wall.post', array(
                         'owner_id'=>$vk_api->owner_id,
                         'message' =>$message
@@ -41,17 +43,24 @@ class Controller extends BaseController
                     }else
                         return response()->json(["error"=>'Error with upload photo'],500);
                 }
-                if (array_key_exists('post_id', $res->response)) {
+                if (array_key_exists('response', $res) and array_key_exists('post_id', $res->response)) {
                     $response = response()->json(
                         [
                             "post_id" => $res->response->post_id
                         ]
                     );
-                } else
+                } else if (array_key_exists('response', $res))
                     $response = response()->json(
                         [
                             "error" => 'Ошибка при создании поста',
                             "response" => $res->response
+                        ], 500
+                    );
+                else
+                    $response = response()->json(
+                        [
+                            "error" => 'Ошибка при создании поста',
+                            "response" => $res
                         ], 500
                     );
             } else {

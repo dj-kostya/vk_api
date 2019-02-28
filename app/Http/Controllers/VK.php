@@ -30,7 +30,7 @@ class VK extends Controller
         if ($image !== null)
         {
             file_put_contents($new_path, $image);
-            $attach = $this->sendPhotoToServer($new_path);
+            $attach = @$this->sendPhotoToServer($new_path);
             unlink($new_path);
         }else {
             $attach = null;
@@ -49,6 +49,7 @@ class VK extends Controller
         $serverUrl = $this->get('photos.getWallUploadServer',array(
             'group_id'=>$this->group_id,
         ))->response->upload_url;
+
         $aPost = array(
             'file' => new CURLFile($path)
         );
@@ -84,7 +85,9 @@ class VK extends Controller
         $parameters = array_merge($parameters,$def_param);
 
         $get_param = http_build_query($parameters);
+
         $response = json_decode( file_get_contents($this->base_url.'/'.$url.'?'.$get_param ));
+
         return $response;
     }
 
